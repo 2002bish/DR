@@ -272,7 +272,7 @@ This AI screening tool is for educational purposes and should not replace profes
                         ) : (
                           <>
                             <Eye className="h-4 w-4" />
-                            <span>Analyze Image</span>
+                                                       <span>Analyze</span>
                           </>
                         )}
                       </button>
@@ -282,173 +282,63 @@ This AI screening tool is for educational purposes and should not replace profes
               </div>
             </div>
 
-            {/* Results Section */}
+            {/* Prediction Result */}
             {prediction && (
               <div className={`rounded-xl shadow-sm border p-6 ${prediction.bgColor}`}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    {prediction.severity === 0 ? (
-                      <CheckCircle className={`h-6 w-6 ${prediction.color}`} />
-                    ) : (
-                      <AlertTriangle className={`h-6 w-6 ${prediction.color}`} />
-                    )}
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-900">Analysis Results</h3>
-                      <p className="text-sm text-gray-600">AI Confidence: {(prediction.confidence * 100).toFixed(1)}%</p>
-                    </div>
-                  </div>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={generateReport}
-                      className="bg-white text-gray-700 px-3 py-1 rounded-lg text-sm hover:bg-gray-50 inline-flex items-center space-x-1"
-                    >
-                      <Download className="h-4 w-4" />
-                      <span>Report</span>
-                    </button>
-                    <button className="bg-white text-gray-700 px-3 py-1 rounded-lg text-sm hover:bg-gray-50 inline-flex items-center space-x-1">
-                      <Share2 className="h-4 w-4" />
-                      <span>Share</span>
-                    </button>
-                  </div>
+                <div className="flex items-center space-x-3 mb-4">
+                  <CheckCircle className={`h-6 w-6 ${prediction.color}`} />
+                  <h2 className={`text-lg font-semibold ${prediction.color}`}>Analysis Result</h2>
                 </div>
+                <p className="text-gray-700 mb-2"><strong>Diagnosis:</strong> {prediction.class}</p>
+                <p className="text-gray-700 mb-2"><strong>Confidence:</strong> {(prediction.confidence * 100).toFixed(1)}%</p>
+                <p className="text-gray-700 mb-2"><strong>Description:</strong> {prediction.description}</p>
+                <p className="text-gray-700 mb-4"><strong>Recommendation:</strong> {prediction.recommendation}</p>
 
-                <div className="bg-white rounded-lg p-4 mb-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-semibold text-gray-900">Diagnosis</h4>
-                    <div className={`px-3 py-1 rounded-full text-xs font-medium ${getSeverityColor(prediction.severity)} text-white`}>
-                      Level {prediction.severity}
-                    </div>
-                  </div>
-                  <p className={`text-lg font-bold ${prediction.color} mb-2`}>{prediction.class}</p>
-                  <p className="text-gray-700 mb-3">{prediction.description}</p>
-                  
-                  <div className="border-t pt-3">
-                    <h5 className="font-medium text-gray-900 mb-2">Detected Features:</h5>
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                      <div className={`flex items-center space-x-2 ${prediction.features.microaneurysms ? 'text-red-600' : 'text-gray-500'}`}>
-                        <div className={`w-2 h-2 rounded-full ${prediction.features.microaneurysms ? 'bg-red-500' : 'bg-gray-300'}`}></div>
-                        <span>Microaneurysms</span>
-                      </div>
-                      <div className={`flex items-center space-x-2 ${prediction.features.hemorrhages ? 'text-red-600' : 'text-gray-500'}`}>
-                        <div className={`w-2 h-2 rounded-full ${prediction.features.hemorrhages ? 'bg-red-500' : 'bg-gray-300'}`}></div>
-                        <span>Hemorrhages</span>
-                      </div>
-                      <div className={`flex items-center space-x-2 ${prediction.features.exudates ? 'text-red-600' : 'text-gray-500'}`}>
-                        <div className={`w-2 h-2 rounded-full ${prediction.features.exudates ? 'bg-red-500' : 'bg-gray-300'}`}></div>
-                        <span>Hard Exudates</span>
-                      </div>
-                      <div className={`flex items-center space-x-2 ${prediction.features.cottonWoolSpots ? 'text-red-600' : 'text-gray-500'}`}>
-                        <div className={`w-2 h-2 rounded-full ${prediction.features.cottonWoolSpots ? 'bg-red-500' : 'bg-gray-300'}`}></div>
-                        <span>Cotton Wool Spots</span>
-                      </div>
-                      <div className={`flex items-center space-x-2 ${prediction.features.neovascularization ? 'text-red-600' : 'text-gray-500'}`}>
-                        <div className={`w-2 h-2 rounded-full ${prediction.features.neovascularization ? 'bg-red-500' : 'bg-gray-300'}`}></div>
-                        <span>Neovascularization</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-lg p-4 border-l-4 border-blue-500">
-                  <h4 className="font-semibold text-gray-900 mb-2">Recommendation</h4>
-                  <p className="text-gray-700">{prediction.recommendation}</p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            
-            {/* Model Info */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Model Information</h3>
-              <div className="space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Architecture:</span>
-                  <span className="font-medium">ResNet-50 CNN</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Training Data:</span>
-                  <span className="font-medium">88,702 images</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Accuracy:</span>
-                  <span className="font-medium text-green-600">94.2%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Sensitivity:</span>
-                  <span className="font-medium text-blue-600">91.8%</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Specificity:</span>
-                  <span className="font-medium text-purple-600">96.5%</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Severity Levels */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">DR Severity Levels</h3>
-              <div className="space-y-3">
-                {[
-                  { level: 0, name: 'No DR', color: 'bg-green-500', desc: 'No abnormalities' },
-                  { level: 1, name: 'Mild NPDR', color: 'bg-yellow-500', desc: 'Microaneurysms only' },
-                  { level: 2, name: 'Moderate NPDR', color: 'bg-orange-500', desc: 'More than mild but less than severe' },
-                  { level: 3, name: 'Severe NPDR', color: 'bg-red-500', desc: 'Extensive retinal changes' },
-                  { level: 4, name: 'Proliferative DR', color: 'bg-red-700', desc: 'Neovascularization present' }
-                ].map((item) => (
-                  <div key={item.level} className="flex items-center space-x-3">
-                    <div className={`w-4 h-4 rounded-full ${item.color}`}></div>
-                    <div className="flex-1">
-                      <div className="font-medium text-gray-900">{item.name}</div>
-                      <div className="text-xs text-gray-500">{item.desc}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Recent History */}
-            {history.length > 0 && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Analyses</h3>
-                <div className="space-y-3">
-                  {history.slice(0, 3).map((item) => (
-                    <div key={item.id} className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
-                      <img 
-                        src={item.image} 
-                        alt="Previous analysis"
-                        className="w-12 h-12 rounded-lg object-cover"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">
-                          {item.filename}
-                        </p>
-                        <p className={`text-xs ${item.result.color}`}>
-                          {item.result.class}
-                        </p>
-                      </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
+                  {Object.entries(prediction.features).map(([feature, value]) => (
+                    <div key={feature} className="text-sm text-gray-700">
+                      • {feature.charAt(0).toUpperCase() + feature.slice(1)}: <strong>{value ? 'Present' : 'Not detected'}</strong>
                     </div>
                   ))}
                 </div>
+
+                <button
+                  onClick={generateReport}
+                  className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors inline-flex items-center space-x-2"
+                >
+                  <Download className="h-4 w-4" />
+                  <span>Download Report</span>
+                </button>
               </div>
             )}
+          </div>
 
-            {/* Disclaimer */}
-            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
-              <div className="flex items-start space-x-3">
-                <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
-                <div>
-                  <h4 className="text-sm font-semibold text-yellow-800">Medical Disclaimer</h4>
-                  <p className="text-xs text-yellow-700 mt-1">
-                    This AI tool is for educational purposes only and should not replace professional medical diagnosis. 
-                    Always consult with a qualified ophthalmologist for definitive diagnosis and treatment.
-                  </p>
-                </div>
+          {/* History Panel */}
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-900">Scan History</h2>
+                <Info className="h-5 w-5 text-gray-400" />
               </div>
+              {history.length === 0 ? (
+                <p className="text-sm text-gray-500">No scans yet. Upload an image to get started.</p>
+              ) : (
+                <ul className="space-y-4 max-h-96 overflow-y-auto">
+                  {history.map((entry) => (
+                    <li key={entry.id} className="flex items-start space-x-4 border-b pb-2">
+                      <img src={entry.image} alt="History thumbnail" className="h-16 w-16 rounded object-cover border" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">{entry.filename}</p>
+                        <p className="text-sm text-gray-500">{new Date(entry.result.timestamp).toLocaleString()}</p>
+                        <p className={`text-sm font-semibold ${entry.result.color}`}>{entry.result.class}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
+
         </div>
       </div>
     </div>
